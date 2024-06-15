@@ -3,7 +3,7 @@
 ## Consideraciones
 
 
-# Project Name
+# Rebits Test
 
 ## Requerimientos
 
