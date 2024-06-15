@@ -1,0 +1,73 @@
+
+
+<script setup>
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import InputError from '@/Components/InputError.vue';
+import InputLabel from '@/Components/InputLabel.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import TextInput from '@/Components/TextInput.vue';
+//import TextArea from '@/Components/TextArea.vue';
+import { Link, useForm, usePage } from '@inertiajs/vue3';
+
+
+const form = useForm({
+   
+  file: null,
+});
+
+function submit() {
+    form.post(route("vehiculos.upload"));
+}
+
+
+</script>
+<template>
+    <Head title="Nuevo Usuario" />
+
+    <AuthenticatedLayout>
+        <template #header>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Subir archivo</h2>
+        </template>
+
+        <div class="py-12">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+                <section>
+                    <form @submit.prevent="submit" class="mt-6 space-y-6">
+                        
+                        <div>
+                            <InputLabel for="file" value="Archivo" />
+
+                            <TextInput
+                                id="file"
+                                type="file"
+                                class="mt-1 block w-full"
+                                @input="form.file = $event.target.files[0]"
+                            />
+                            
+                            <progress v-if="form.progress" :value="form.progress.percentage" max="100">
+                            {{ form.progress.percentage }}%
+                            </progress>
+
+                            <InputError class="mt-2" :message="form.errors.file" />
+                        </div>
+
+                        
+
+                        <div class="flex items-center gap-4">
+                            <PrimaryButton :disabled="form.processing">Cargar datos</PrimaryButton>
+
+                            <Transition
+                                enter-active-class="transition ease-in-out"
+                                enter-from-class="opacity-0"
+                                leave-active-class="transition ease-in-out"
+                                leave-to-class="opacity-0"
+                            >
+                                <p v-if="form.recentlySuccessful" class="text-sm text-gray-600">Cargado.</p>
+                            </Transition>
+                        </div>
+                    </form>
+                </section>
+            </div>
+        </div>
+    </AuthenticatedLayout>
+</template>

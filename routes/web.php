@@ -49,7 +49,14 @@ Route::resource('vehiculos', VehiculoController::class)->names([
     'edit' => 'vehiculos.edit',
     'update' => 'vehiculos.update',
     'destroy' => 'vehiculos.destroy'
+    
 ]);
+
+Route::get('/massiveupload', function () {
+    return Inertia::render('Vehiculo/Upload');
+})->middleware(['auth', 'verified'])->name('massiveupload');
+
+Route::post('vahiculos/upload' , [VehiculoController::class , 'massiveUpload'])->middleware(['auth', 'verified'])->name('vehiculos.upload');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

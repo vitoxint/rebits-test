@@ -11,6 +11,13 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Imports\VehiculoImport;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log; 
+use Exception; 
+use Illuminate\Support\Facades\Auth; 
+use App\Mail\CargaMasivaEmail;
 
 
 class VehiculoController extends Controller
@@ -172,6 +179,58 @@ class VehiculoController extends Controller
     public function destroy(Vehiculo $vehiculo)
     {
         $vehiculo->delete();
-        return redirect()->route('vehiculos.index')->with('message', 'Vahículo eliminado');
+        return redirect()->route('vehiculos.index')->with('message', 'Vehículo eliminado');
+    }
+
+
+    public function massiveUpload( Request $request )
+    {
+
+        $request->validate([
+            'file' => [
+                'required',
+                'file'
+            ],
+        ]);
+
+        
+        try {
+            
+            Excel::import(new VehiculoImport, $request->file('file'));
+
+            $recipient = 'support@rebits.cl';
+            $data = [
+                
+                'username' => Auth::user()->name,
+                'resultado' => 'Se ha ejecutado correntamente la carga de registro de vehículos.',
+                
+            ];
+
+            Mail::to($recipient)->send(new CargaMasivaEmail( $data['username'], $data['resultado']));
+
+        } catch (Exception $e) {
+            
+            Log::debug($e->getMessage());
+            $recipient = 'support@rebits.cl'; 
+            $data = [
+                
+                'username' => Auth::user()->name,
+                'resultado' => 'Hubo un error en la carga de registro de vehículos , por favor revise su archivo o intente nuevamente o comuniquese con soporte.',
+                
+            ];
+
+            Mail::to($recipient)->send(new CargaMasivaEmail( $data['username'], $data['resultado']));
+            
+            // Either form a friendlier message to display to the user OR redirect them to a failure page
+        }
+
+
+
+        return redirect()->route('vehiculos.index')->with('message', 'Vehículos cargados masivamente');
+
+       
+
+
+
     }
 }

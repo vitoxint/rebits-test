@@ -43,6 +43,11 @@ const showingNavigationDropdown = ref(false);
                                     Usuarios
                                 </NavLink>
                             </div>
+                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <NavLink :href="route('massiveupload')" :active="route().current('massiveupload')">
+                                    Carga Masiva
+                                </NavLink>
+                            </div>
                         </div>
 
                         <div class="hidden sm:flex sm:items-center sm:ms-6">
@@ -134,6 +139,11 @@ const showingNavigationDropdown = ref(false);
                     <div class="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink :href="route('usuarios.index')" :active="route().current('usuarios.*')">
                             Usuarios
+                        </ResponsiveNavLink>
+                    </div>
+                    <div class="pt-2 pb-3 space-y-1">
+                        <ResponsiveNavLink :href="route('massiveupload')" :active="route().current('massiveupload')">
+                            Carga Masiva
                         </ResponsiveNavLink>
                     </div>
 
