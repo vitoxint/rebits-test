@@ -17,7 +17,7 @@
 ### 1. clonar el repositorio
 
 ```sh
-git clone https://github.com/vitoxnt/rebit-test.git
+git clone https://github.com/vitoxint/rebits-test.git
 cd rebits-test
 ```
 ### Instalar dependencias de php
